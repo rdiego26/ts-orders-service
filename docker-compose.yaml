@@ -12,3 +12,36 @@ services:
     environment:
       PORT: 3000
       NODE_ENV: development
+      DB_URI: "postgresql://postgres:postgres@db:5432/orders"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - db_net
+  db:
+    image: postgres:10.4
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders
+    volumes:
+      - ./csv_data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./csv_data/merchants.csv:/docker-entrypoint-initdb.d/merchants.csv
+      - ./csv_data/orders.csv:/docker-entrypoint-initdb.d/orders.csv
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
+    networks:
+      - db_net
+
+volumes:
+  pgdata: {}
+
+networks:
+  db_net:
+    driver: bridge
