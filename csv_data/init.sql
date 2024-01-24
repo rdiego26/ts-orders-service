@@ -22,3 +22,5 @@ create table if not exists orders
 );
 
 COPY orders FROM '/docker-entrypoint-initdb.d/orders.csv' DELIMITER ';' CSV HEADER;
+
+CREATE DATABASE metabase;

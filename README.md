@@ -6,6 +6,7 @@
 - [Typescript](https://www.typescriptlang.org/)
 - [Express](https://expressjs.com/)
 - [TypeORM](https://typeorm.io/)
+- [Metabase](https://www.metabase.com/)
 
 ### Steps to run
 - Up containers `docker-compose up`
