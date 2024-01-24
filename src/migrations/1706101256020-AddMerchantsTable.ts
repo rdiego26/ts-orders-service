@@ -11,8 +11,7 @@ export class AddMerchantsTable1706101256020 implements MigrationInterface {
                 email  text    unique                             not null,
                 live_on      date                                 not null,
                 disbursement_frequency  text not null,
-                minimum_monthly_fee  numeric(2, 1) not null default 0.0,
-                created_at timestamp with time zone default now() not null
+                minimum_monthly_fee  numeric(2, 1) not null default 0.0
             );
             
             create index if not exists merchants_disbursement_frequency_index
