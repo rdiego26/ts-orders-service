@@ -13,7 +13,8 @@ export class AddDisbursementsTable1706142822895 implements MigrationInterface {
               merchant_reference text not null,
               created_at date not null,
                   constraint disbursements_merchants_reference_fk
-                      references merchants (reference)
+                  foreign key (merchant_reference)
+                  references merchants (reference)
           );
 
 

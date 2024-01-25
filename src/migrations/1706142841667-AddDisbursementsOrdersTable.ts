@@ -11,9 +11,11 @@ export class AddDisbursementsOrdersTable1706142841667 implements MigrationInterf
                   order_id text not null,
                   amount  numeric(5, 2) not null,
                   fee  numeric(5, 2) not null,
+                  
                   CONSTRAINT fk_disbursements
                   FOREIGN KEY(disbursement_id)
                   REFERENCES disbursements(id),
+                  
                   CONSTRAINT fk_orders
                   FOREIGN KEY(order_id)
                   REFERENCES orders(id)
