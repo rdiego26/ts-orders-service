@@ -19,6 +19,6 @@ export class AddOrdersTable1706106395843 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('DROP TABLE IF EXISTS oders;');
+    await queryRunner.query('DROP TABLE IF EXISTS orders;');
   }
 }
