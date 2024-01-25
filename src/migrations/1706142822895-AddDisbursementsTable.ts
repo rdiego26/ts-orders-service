@@ -10,7 +10,8 @@ export class AddDisbursementsTable1706142822895 implements MigrationInterface {
                   constraint disbursements_pk
                       primary key,
               reference          text not null,
-              merchant_reference text not null
+              merchant_reference text not null,
+              created_at date not null,
                   constraint disbursements_merchants_reference_fk
                       references merchants (reference)
           );

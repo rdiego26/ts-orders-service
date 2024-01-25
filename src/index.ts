@@ -13,6 +13,7 @@ import express, { Application } from 'express';
 import Router from './routes';
 import process from 'process';
 import { Constants } from './utils/constants';
+import { DisbursementsWorker } from './workers/disbursements';
 
 const app: Application = express();
 app.use(express.json({ limit: '1mb' }));
@@ -31,6 +32,9 @@ const start = async () => {
     console.log('Running needed migrations...');
     const migrations = await dbConnection.runMigrations();
     console.log(`Performed ${migrations.length} migrations`);
+
+    const worker = new DisbursementsWorker();
+    await worker.start();
 
     app.listen(Constants.app.port, () => {
       console.log('Server is running on port', Constants.app.port);
