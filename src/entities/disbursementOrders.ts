@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Disbursement } from './disbursements';
 import { Order } from './orders';
 
-@Entity('disbursementOrders')
+@Entity('disbursements_orders')
 export class DisbursementOrders {
   @PrimaryColumn()
   id!: string;

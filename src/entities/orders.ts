@@ -34,11 +34,11 @@ export class Order {
 
   calcFee(): number {
     if (this.amount < 50) {
-      return this.amount * 0.01;
+      return Number((this.amount - this.amount * 0.01).toFixed(2));
     } else if (this.amount > 49 || this.amount < 299) {
-      return this.amount * 0.95;
+      return Number((this.amount - this.amount * 0.95).toFixed(2));
     } else {
-      return this.amount * 0.85;
+      return Number((this.amount - this.amount * 0.85).toFixed(2));
     }
   }
 }

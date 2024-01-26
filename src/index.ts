@@ -13,7 +13,7 @@ import express, { Application } from 'express';
 import Router from './routes';
 import process from 'process';
 import { Constants } from './utils/constants';
-import { DisbursementsWorker } from './workers/disbursements';
+import { CalculateImportedDisbursementsWorker } from './workers/calculateImportedDisbursements';
 
 const app: Application = express();
 app.use(express.json({ limit: '1mb' }));
@@ -33,12 +33,12 @@ const start = async () => {
     const migrations = await dbConnection.runMigrations();
     console.log(`Performed ${migrations.length} migrations`);
 
-    const worker = new DisbursementsWorker();
-    await worker.start();
-
     app.listen(Constants.app.port, () => {
       console.log('Server is running on port', Constants.app.port);
     });
+
+    const worker = new CalculateImportedDisbursementsWorker();
+    await worker.start();
   } catch (err: any) {
     //FIXME: send error for sentry/new relic, or other tool
     console.log('Unable to start app', err);
