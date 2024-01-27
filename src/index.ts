@@ -11,6 +11,7 @@ import * as swaggerDocument from '../public/swagger.json';
 import express, { Application } from 'express';
 
 import Router from './routes';
+import { authMiddleware } from './middlewares/auth';
 import process from 'process';
 import { Constants } from './utils/constants';
 import { CalculateImportedDisbursementsWorker } from './workers/calculateImportedDisbursements';
@@ -24,6 +25,7 @@ app.use(compression());
 app.use(cors());
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/*', authMiddleware);
 app.use(Router);
 
 const start = async () => {
