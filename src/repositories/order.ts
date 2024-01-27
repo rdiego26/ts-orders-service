@@ -3,9 +3,12 @@ import dbConfig from '../config/database';
 import { Order } from '../entities/orders';
 import { DisbursementFrequency } from '../entities/merchants';
 
-export const getPendingToPay = async (): Promise<Order[]> => {
+export const getPendingToPay = async (disbursementFrequency: DisbursementFrequency): Promise<Order[]> => {
   const repository: Repository<Order> = dbConfig.getRepository(Order);
-  return await repository.find({ relations: { merchant: true }, where: { refundedAt: IsNull() }, take: 1000 });
+  return await repository.find({
+    relations: { merchant: true },
+    where: { refundedAt: IsNull(), merchant: { disbursementFrequency: disbursementFrequency } },
+  });
 };
 
 export const getDailyPendingToPay = async (): Promise<Order[]> => {
