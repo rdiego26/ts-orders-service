@@ -50,3 +50,7 @@ _Note that the table values are samples, not the correct numbers._
 - Run tests: `docker-compose run api npm test`
   - Or if you want, you can run outside container(make sure that you have performed `npm i` before): `npm test`
 - Migrations are created (make sure that you have performed `npm i` before)Create migration: `typeorm migration:create ./src/migrations/NAME`
+
+### Documentation
+- [Comments](./docs/comments.md)
+- [Next-Steps](./docs/next-steps.md)
