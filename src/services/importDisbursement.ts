@@ -1,11 +1,12 @@
 import { Order } from '../entities/orders';
-import { getByDateAndMerchant } from '../repositories/disbursements';
 import { Disbursement } from '../entities/disbursements';
 import { randAlpha, randUuid } from '@ngneat/falso';
 import dbConfig from '../config/database';
 import { DisbursementOrders } from '../entities/disbursementOrders';
 import { getTotalFeeOnMonth } from '../repositories/disbursementsOrders';
 import { IsNull, Repository } from 'typeorm';
+import { DisbursementFrequency } from '../entities/merchants';
+import { DateUtils } from '../utils/date';
 
 export class ImportDisbursement {
   public async importDisbursement(order: Order): Promise<void> {
@@ -13,15 +14,26 @@ export class ImportDisbursement {
 
     const queryRunner = dbConfig.createQueryRunner();
     await queryRunner.startTransaction('READ COMMITTED');
+    const weekName = order.createdAt.toLocaleString('en-us', { weekday: 'long' });
+    const disbursementFrequency = order.merchant.disbursementFrequency;
+    const dateToReference =
+      disbursementFrequency === DisbursementFrequency.DAILY
+        ? order.createdAt
+        : DateUtils.getNextDayOfTheWeek(weekName, true, order.createdAt);
+
+    if (!dateToReference) {
+      console.error(`Disbursement frequency ${disbursementFrequency} not supported!`);
+      return;
+    }
 
     const disbursementRepository: Repository<Disbursement> = dbConfig.manager.getRepository(Disbursement);
     const fetchedDisbursement: Disbursement | null = await disbursementRepository.findOne({
-      where: { createdAt: order.createdAt, merchant: { reference: order.merchant.reference } },
+      where: { createdAt: dateToReference, merchant: { reference: order.merchant.reference } },
     });
 
     const disbursement = new Disbursement();
     disbursement.merchant = order.merchant;
-    disbursement.createdAt = order.createdAt;
+    disbursement.createdAt = dateToReference;
     disbursement.id = randUuid();
     disbursement.reference = randAlpha({ length: 10 }).join('');
 
