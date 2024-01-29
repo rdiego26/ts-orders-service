@@ -1,11 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Merchant } from './merchants';
 
-export enum DisbursementFrequency {
-  DAILY = 'DAILY',
-  WEEKLY = 'WEEKLY',
-}
-
 @Entity('orders')
 export class Order {
   @PrimaryColumn()

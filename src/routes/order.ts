@@ -1,18 +1,18 @@
 import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import UserController from '../controllers/user';
 import { DomainError } from '../utils/exceptions';
-import { User } from '../entities/users';
+import OrderController from '../controllers/order';
+import { Order } from '../entities/orders';
 const { Validator } = require('express-json-validator-middleware');
 const { validate } = new Validator();
-const createSchema = require('../schemas/users/create');
+const createSchema = require('../schemas/orders/create');
 
 const router = express.Router();
 
 router.post('/', validate({ body: createSchema }), async (req: Request, res: Response) => {
   try {
-    const controller: UserController = new UserController();
-    const response: User = await controller.createUser(req.body);
+    const controller: OrderController = new OrderController();
+    const response: Order = await controller.createOrder(req.body);
 
     return res.status(StatusCodes.CREATED).send(response);
   } catch (e: any) {
