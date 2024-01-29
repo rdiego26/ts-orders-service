@@ -12,4 +12,8 @@ export const Constants = {
     URI: process.env.DB_URI,
     POOL_MAX: process.env.POOL_MAX || 3,
   },
+  queue: {
+    URI: process.env.QUEUE_URI,
+    QUEUE_NAME: process.env.QUEUE_NAME,
+  },
 };

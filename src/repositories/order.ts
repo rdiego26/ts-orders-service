@@ -34,6 +34,7 @@ export const createOrder = async (payload: ICreateOrderPayload): Promise<Order> 
 
   order.id = crypto.randomUUID();
   order.merchant = merchant!!;
+  order.amount = payload.amount;
 
   return orderRepository.save(order);
 };

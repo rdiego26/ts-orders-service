@@ -3,6 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 import { DomainError } from '../utils/exceptions';
 import OrderController from '../controllers/order';
 import { Order } from '../entities/orders';
+import queueConnection from '../services/queueConnection';
+import { INotification, sendNotification } from '../services/notification';
 const { Validator } = require('express-json-validator-middleware');
 const { validate } = new Validator();
 const createSchema = require('../schemas/orders/create');
@@ -13,6 +15,12 @@ router.post('/', validate({ body: createSchema }), async (req: Request, res: Res
   try {
     const controller: OrderController = new OrderController();
     const response: Order = await controller.createOrder(req.body);
+
+    await queueConnection.connect();
+    const message: INotification = {
+      orderId: response.id,
+    };
+    await sendNotification(message);
 
     return res.status(StatusCodes.CREATED).send(response);
   } catch (e: any) {

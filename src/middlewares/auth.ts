@@ -4,10 +4,12 @@ import { verifyToken } from '../services/auth';
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const auth: string | undefined = req.headers.authorization;
+  const verb: string = req.method;
   const requestURL = req.originalUrl;
   const publicEndpoints: string[] = ['/healthCheck', '/api/login'];
+  const isCreateUserOperation: boolean = verb === 'POST' && requestURL === '/api/users';
 
-  if (publicEndpoints.includes(requestURL)) {
+  if (isCreateUserOperation || publicEndpoints.includes(requestURL)) {
     next();
   } else {
     if (auth && auth.startsWith('Bearer')) {

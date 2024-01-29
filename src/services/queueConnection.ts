@@ -1,5 +1,5 @@
-import client, { Connection, Channel, ConsumeMessage } from 'amqplib';
-import process from 'process';
+import client, { Connection, Channel } from 'amqplib';
+import { Constants } from '../utils/constants';
 
 class QueueConnection {
   connection!: Connection;
@@ -11,8 +11,8 @@ class QueueConnection {
     else this.connected = true;
 
     try {
-      console.log(`⌛️ Connecting to Rabbit-MQ Server`);
-      this.connection = await client.connect(process.env.QUEUE_URI!!);
+      console.log(`⌛️ Connecting to Queue Server`);
+      this.connection = await client.connect(Constants.queue.URI!!);
 
       console.log(`✅ Queue Connection is ready`);
 
