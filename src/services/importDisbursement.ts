@@ -67,7 +67,7 @@ export class ImportDisbursement {
         await dbConfig.manager.save(disbursementOrder);
       }
 
-      await dbConfig.manager.update(Order, { id: order.id, refundedAt: IsNull() }, { refundedAt: order.createdAt });
+      await dbConfig.manager.update(Order, { id: order.id, refundedAt: IsNull() }, { refundedAt: dateToReference });
 
       await queryRunner.commitTransaction();
     } catch (error: any) {

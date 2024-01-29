@@ -6,7 +6,7 @@ import { DisbursementFrequency } from '../entities/merchants';
 export class CalculateImportedDisbursementsWorker {
   async start() {
     console.log('Starting CalculateImportedDisbursementsWorker...');
-    const fetchedOrders = await getPendingToPay(DisbursementFrequency.DAILY);
+    const fetchedOrders = await getPendingToPay();
     console.log(`Fetched ${fetchedOrders.length} orders to pay`);
     const importDisbursementService = new ImportDisbursement();
 
