@@ -13,8 +13,12 @@ services:
       PORT: 3000
       NODE_ENV: development
       DB_URI: "postgresql://postgres:postgres@db:5432/orders"
+      QUEUE_URI: "amqp://admin:admin123@queue:5672/"
+      QUEUE_NAME: "orders-to-disburse"
     depends_on:
       db:
+        condition: service_healthy
+      queue:
         condition: service_healthy
     networks:
       - db_net
@@ -57,10 +61,30 @@ services:
         condition: service_healthy
     networks:
       - db_net
+  queue:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - queue_net
 
 volumes:
   pgdata: {}
 
 networks:
   db_net:
+    driver: bridge
+  queue_net:
     driver: bridge

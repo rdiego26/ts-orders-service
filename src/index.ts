@@ -39,8 +39,8 @@ const start = async () => {
       console.log('Server is running on port', Constants.app.port);
     });
 
-    const worker = new CalculateImportedDisbursementsWorker();
-    await worker.start();
+    // const worker = new CalculateImportedDisbursementsWorker();
+    // await worker.start();
   } catch (err: any) {
     //FIXME: send error for sentry/new relic, or other tool
     console.log('Unable to start app', err);
