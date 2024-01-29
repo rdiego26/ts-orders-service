@@ -1,7 +1,6 @@
 import * as console from 'console';
 import { getPendingToPay } from '../repositories/order';
 import { ImportDisbursement } from '../services/importDisbursement';
-import { DisbursementFrequency } from '../entities/merchants';
 
 export class CalculateImportedDisbursementsWorker {
   async start() {

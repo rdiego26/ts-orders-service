@@ -17,6 +17,11 @@ export const getPendingToPay = async (): Promise<Order[]> => {
   });
 };
 
+export const findByOrderById = async (id: string): Promise<Order | null> => {
+  const repository: Repository<Order> = dbConfig.getRepository(Order);
+  return await repository.findOne({ where: { id } });
+};
+
 export const setRefunded = async (refundedAt: Date, ids: string[]): Promise<UpdateResult> => {
   const repository: Repository<Order> = dbConfig.getRepository(Order);
 

@@ -15,6 +15,7 @@ import { authMiddleware } from './middlewares/auth';
 import process from 'process';
 import { Constants } from './utils/constants';
 import { CalculateImportedDisbursementsWorker } from './workers/calculateImportedDisbursements';
+import { DisburseNewOrders } from './consumers/DisburseNewOrders';
 
 const app: Application = express();
 app.use(express.json({ limit: '1mb' }));
@@ -38,6 +39,9 @@ const start = async () => {
     app.listen(Constants.app.port, () => {
       console.log('Server is running on port', Constants.app.port);
     });
+
+    const subscriber = new DisburseNewOrders();
+    await subscriber.start();
 
     // const worker = new CalculateImportedDisbursementsWorker();
     // await worker.start();

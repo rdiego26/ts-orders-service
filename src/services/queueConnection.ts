@@ -1,6 +1,8 @@
 import client, { Connection, Channel } from 'amqplib';
 import { Constants } from '../utils/constants';
 
+type HandlerCB = (msg: string) => any;
+
 class QueueConnection {
   connection!: Connection;
   channel!: Channel;
@@ -36,6 +38,28 @@ class QueueConnection {
       console.error(error);
       throw error;
     }
+  }
+
+  async consume(queueName: string, handleIncomingNotification: HandlerCB) {
+    await this.channel.assertQueue(queueName, {
+      durable: true,
+    });
+
+    await this.channel.consume(
+      queueName,
+      (msg) => {
+        {
+          if (!msg) {
+            return console.error(`Invalid incoming message`);
+          }
+          handleIncomingNotification(msg?.content?.toString());
+          this.channel.ack(msg);
+        }
+      },
+      {
+        noAck: false,
+      },
+    );
   }
 }
 
