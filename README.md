@@ -30,9 +30,9 @@ We expect you to:
 - Fill the following table and include it in the README.  
 
 | Year  | Number of disbursements | Amount disbursed to merchants | Amount of order fees | Number of monthly fees charged (From minimum monthly fee) | Amount of monthly fee charged (From minimum monthly fee) |
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
-| 2022  | 365  | 50.023,45 €  | 750,34 €  | 50  | 650,00 €  |
-| 2023  | 400  | 75.000,35 €  | 950,43 €  | 49  | 750,00 €  |
+| ------------- |-------------------------|-------------------------------|----------------------|-----------------------------------------------------------|----------------------------------------------------------| 
+| 2022  | -                       | - €                           | - €                  | -                                                         | - €                                                      |
+| 2023  | -                       | - €                           | - €                  | -                                                         | - €                                                      |
 
 _Note that the table values are samples, not the correct numbers._
 
