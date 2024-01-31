@@ -1,0 +1,22 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "spec": {
+    "outputDirectory": "public",
+    "specVersion": 3,
+    "basePath": "/",
+    "contact": {
+      "email": "rdiego26@gmail.com"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000",
+        "description": "Local environment"
+      },
+      {
+        "url": "https://api.jonsup.com",
+        "description": "Production environment"
+      }
+    ]
+  }
+}

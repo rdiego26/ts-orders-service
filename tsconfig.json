@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": [
+      "es6"
+    ],
+    "types": ["jest", "node"],
+    "allowJs": true,
+    "outDir": "./build",
+    "rootDir": "src",
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "baseUrl": "./",
+    "paths": {
+      "test/*": [
+        "test/*"
+      ]
+    },
+  },
+  "include": ["src/**/*"],
+  "exclude" : ["src/**/*.test.ts"],
+}
