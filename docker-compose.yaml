@@ -1,0 +1,91 @@
+version: "3"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      DB_URI: "postgresql://postgres:postgres@db:5432/orders"
+      QUEUE_URI: "amqp://admin:admin123@queue:5672/"
+      QUEUE_NAME: "orders-to-disburse"
+    depends_on:
+      db:
+        condition: service_healthy
+      queue:
+        condition: service_healthy
+    networks:
+      - db_net
+      - queue_net
+  db:
+    image: postgres:10.4
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders
+    volumes:
+      - ./csv_data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./csv_data/merchants.csv:/docker-entrypoint-initdb.d/merchants.csv
+      - ./csv_data/orders.csv:/docker-entrypoint-initdb.d/orders.csv
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
+    networks:
+      - db_net
+  metabase:
+    image: metabase/metabase:latest
+    restart: always
+    ports:
+      - "4000:3000"
+    environment:
+      MB_DB_TYPE: "postgres"
+      MB_DB_DBNAME: "metabase"
+      MB_DB_PORT: "5432"
+      MB_DB_USER: "postgres"
+      MB_DB_PASS: "postgres"
+      MB_DB_HOST: "db"
+      MB_PASSWORD_COMPLEXITY: strong
+      MB_PASSWORD_LENGTH: 10
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - db_net
+  queue:
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - queue_net
+
+volumes:
+  pgdata: {}
+
+networks:
+  db_net:
+    driver: bridge
+  queue_net:
+    driver: bridge
